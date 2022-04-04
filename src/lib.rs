@@ -15,3 +15,9 @@ pub struct ImageReturn {
     pub channels: Vec<u8>,
     pub dims: Vec<(usize, usize)>,
 }
+
+impl Default for ImageReturn {
+    fn default() -> Self {
+        Self { found_in: Default::default(), exact_paths: Default::default(), data: Default::default(), channels: Default::default(), dims: Default::default() }
+    }
+}

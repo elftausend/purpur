@@ -20,12 +20,12 @@ pub enum Apply<'a> {
 }
 
 pub struct Transforms<'a> {
-    applies: &'a mut [Apply<'a>],
+    applies: Vec<Apply<'a>>,
     shuffle: bool,
 }
 
 impl <'a>Transforms<'a> {
-    pub fn new(applies: &'a mut [Apply<'a>]) -> Transforms<'a> {
+    pub fn new(applies: Vec<Apply<'a>>) -> Transforms<'a> {
         Transforms {
             applies,
             shuffle: false,
@@ -100,7 +100,6 @@ impl <'a>Transforms<'a> {
                                         data: img_ret.data.clone(),
                                         channels: channels.clone(),
                                         dims: dims.clone(),
-                                        
                                     }    
                                 }
                             },
