@@ -10,6 +10,6 @@ fn test_transforms() {
         Apply::GetImgRet(&mut ir),
     ]);
 
-    transforms.apply("../gradients-fallback/datasets/berries_aug_6xx/train").unwrap();
+    //transforms.apply("../gradients-fallback/datasets/berries_aug_6xx/train").unwrap();
 
 }
