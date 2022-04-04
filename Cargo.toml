@@ -7,3 +7,5 @@ edition = "2021"
 
 [dependencies]
 walkdir = "2"
+image = "0.24.0"
+rand = "*"
