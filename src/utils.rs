@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 
-use rand::{distributions::Alphanumeric, prelude::ThreadRng, Rng};
+use rand::{distributions::Alphanumeric, prelude::{ThreadRng, SliceRandom}, Rng};
 use walkdir::{WalkDir, DirEntry};
 
 
@@ -39,4 +39,34 @@ pub fn create_new_path_from_old<P: AsRef<Path>, P1: AsRef<Path>>(image_path: P, 
     let output_to = Path::new(output_to.as_ref());
     let path = output_to.join(path);
     Ok(path)
+}
+
+
+pub fn shuffle<T: Copy, G: Copy>(rows: usize, data: &[T], y_values: &[G]) -> (Vec<T>, Vec<G>) {
+    let mut x = vec![0usize; rows];
+    for idx in 1..rows {
+        x[idx] = idx;
+    }
+    let mut rng = rand::thread_rng();
+    x.shuffle(&mut rng);
+
+    let mut shuffeled = Vec::<T>::new();
+
+    let mut y_shuffeled = Vec::<G>::new();
+
+    let cols = data.len() / rows;
+    
+    for idx in x.iter() {
+
+        unsafe {
+            y_shuffeled.push(*y_values.get_unchecked(*idx));
+        }
+        let i = idx*cols;
+        let row = &data[i..i+cols];
+        for value in row {
+            shuffeled.push(*value);
+        }
+    }
+    
+    (shuffeled, y_shuffeled)
 }
