@@ -1,4 +1,4 @@
-mod utils;
+pub mod utils;
 mod transforms;
 mod image_return;
 mod csv_load;

@@ -4,12 +4,13 @@ use csv::Reader;
 
 use crate::shuffle;
 
-
 pub struct CSVReturn<T> {
     pub x: Vec<T>,
     pub y: Vec<T>,
     pub max: T,
     pub sample_count: usize,
+    pub features: usize,
+
 }
 
 impl <T>CSVReturn<T> {
@@ -73,6 +74,7 @@ impl CSVLoader {
             y = shuffeled.1;
         }
         let csv = CSVReturn {
+            features: x.len() / m,
             y,
             x,
             max,

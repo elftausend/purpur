@@ -70,3 +70,35 @@ pub fn shuffle<T: Copy, G: Copy>(rows: usize, data: &[T], y_values: &[G]) -> (Ve
     
     (shuffeled, y_shuffeled)
 }
+
+///(via clone) reduces the len of an array, which is randomized, to a given max len
+pub fn random_short_mut<T: Clone+Default>(reduce_arr: &mut [T], max_len: usize) -> Vec<T> {
+    let mut rng = rand::thread_rng();
+    let mut final_arr = Vec::<T>::with_capacity(max_len);
+
+    reduce_arr.shuffle(&mut rng);
+    for elem in &reduce_arr[..max_len] {
+        final_arr.push(elem.clone());
+    }
+    final_arr
+}
+
+pub fn min<T: Copy+PartialOrd>(array: &[T]) -> T {
+    let mut min = array[0];
+    for value in array {
+        if value < &min {
+            min = *value;
+        }
+    }
+    min
+}
+
+pub fn max<T: Copy+PartialOrd>(array: &[T]) -> T {
+    let mut max = array[0];
+    for value in array {
+        if value > &max {
+            max = *value;
+        }
+    }
+    max
+}
