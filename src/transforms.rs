@@ -106,14 +106,11 @@ impl <'a>Transforms<'a> {
                             Apply::Encode => img_encode = true,
                             Apply::CenterCrop(nw, nh) => {
                                 let (width, height) = img.dimensions();
-
-                                let new_witdh = *nw*2;
-                                let new_height = *nh*2;
                                 
-                                let to_subtract_w = -((new_witdh/2) as i32) as u32 + width;
-                                let to_subtract_h = -((new_height/2) as i32) as u32 + height;
+                                let subtract_w = width - *nw;
+                                let subtract_h = height - *nh;
                                 
-                                img = img.crop_imm(to_subtract_w/2, to_subtract_h/2, width-to_subtract_w, height-to_subtract_h);
+                                img = img.crop_imm(subtract_w/2, subtract_h/2, width-subtract_w, height-subtract_h);
                             },                            
                         }
                     }
@@ -121,6 +118,7 @@ impl <'a>Transforms<'a> {
                 Err(_) => continue,
             }
         }
+        
         Ok(())
     }
 }
