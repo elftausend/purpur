@@ -83,15 +83,15 @@ impl <'a>Transforms<'a> {
                                 img.save(&path).unwrap();
                             },
                             Apply::GetImgRet(img_ret) => {
-                                let mut data;
-                                if img_encode {
-                                    data = img.as_bytes().to_vec();
+                                
+                                let mut data = if img_encode {
+                                    img.as_bytes().to_vec()
                                 } else {
                                     let mut from_encoder = Vec::new();
                                     let mut file = File::open(image_path.path()).unwrap();
                                     file.read_to_end(&mut from_encoder).unwrap();
-                                    data = from_encoder;
-                                }
+                                    from_encoder
+                                };
                                 img_ret.data.append(&mut data);
                                 if idx == image_count-1 {
                                     **img_ret = ImageReturn {

@@ -7,8 +7,7 @@ use walkdir::{WalkDir, DirEntry};
 pub fn get_paths<P: AsRef<Path>>(path: P) -> Result<(Vec<PathBuf>, Vec<DirEntry>), std::io::Error> {
     // paths / directories that are named after a class
     let mut entries = std::fs::read_dir(&path)?
-        .map(|res| res.map(|e| e.path()))
-        .flatten()
+        .flat_map(|res| res.map(|e| e.path()))
         .filter(|path| path.is_dir())
         .collect::<Vec<PathBuf>>();
 
@@ -47,6 +46,8 @@ pub fn shuffle<T: Copy, G: Copy>(rows: usize, data: &[T], y_values: &[G]) -> (Ve
     for idx in 1..rows {
         x[idx] = idx;
     }
+
+
     let mut rng = rand::thread_rng();
     x.shuffle(&mut rng);
 
@@ -102,3 +103,24 @@ pub fn max<T: Copy+PartialOrd>(array: &[T]) -> T {
     }
     max
 }
+
+/// search_for: [0.1, 0.6, 4.,], 
+/// search_with: [4.]; 
+/// output: [2]
+pub fn find_idxs<T: Copy+PartialEq>(rows: usize, search_for: &[T], search_with: &[T]) -> Vec<usize> {
+    let cols = search_for.len()/rows;
+
+    let mut idxs = vec![0usize; rows];
+
+    for idx in 0..rows {
+        let index = idx*cols;
+        let row = &search_for[index..index+cols];
+        for (row_idx, value) in row.iter().enumerate() {
+            if *value == search_with[idx] {
+                idxs[idx] = row_idx;
+            }
+        }
+    }
+    idxs
+}
+
