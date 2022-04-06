@@ -42,9 +42,10 @@ impl CSVLoader {
         let mut max = T::default();
         let mut m: usize = 0;
 
-        let mut first = false;
+        
         
         for result in rdr.records() {
+            let mut first = true;
             let record = result.unwrap();
             
             for r in record.iter() {
@@ -56,9 +57,9 @@ impl CSVLoader {
                     Err(_) => panic!("Read value was not an integer."),
                 };
 
-                if !first {
+                if first {
                     y.push(value);
-                    first = true;
+                    first = false;
                 } else { 
                     if value > max {
                         max = value;
