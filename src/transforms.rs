@@ -62,10 +62,6 @@ impl <'a>Transforms<'a> {
                         ColorType::Rgba8 => channels.push(3),
                         _ => continue,
                     }
-
-                    let img_dims = img.dimensions();
-                    dims.push((img_dims.0 as usize, img_dims.1 as usize));
-
                     for apply in self.applies.iter_mut() {
                         match apply {
                             Apply::FlipV => img = img.flipv(),
@@ -114,6 +110,8 @@ impl <'a>Transforms<'a> {
                             },                            
                         }
                     }
+                    let img_dims = img.dimensions();
+                    dims.push((img_dims.0 as usize, img_dims.1 as usize));
                 },
                 Err(_) => continue,
             }
