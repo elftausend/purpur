@@ -1,11 +1,11 @@
-use std::{path::Path, fs::File, io::Read};
+use std::{path::Path, fs::File, io::Read, collections::hash_map::DefaultHasher, hash::{Hash, Hasher}};
 
 use image::{ColorType, GenericImageView, imageops::FilterType};
 use rand::prelude::SliceRandom;
 
-use crate::{ImageReturn, utils, create_new_path_from_old};
+use crate::{ImageReturn, utils, create_path_with_hash};
 
-
+#[derive(Debug)]
 pub enum Apply<'a> {
     ///Flip vertically
     FlipV,
@@ -73,8 +73,12 @@ impl <'a>Transforms<'a> {
                                 vec.append(&mut data);
                             },
                             Apply::SaveTo(p) => {
-                                let path = create_new_path_from_old(image_path.path(), p, &mut rng)?;
-        
+                                let mut hasher = DefaultHasher::default();                                
+                                img.as_bytes().hash(&mut hasher);
+                                let hash = hasher.finish();
+                                
+                                let path = create_path_with_hash(image_path.path(), p, hash)?;
+                                //let path = create_new_path_from_old(image_path.path(), p, &mut rng)?;
                                 std::fs::create_dir_all(path.parent().unwrap())?;
                                 img.save(&path).unwrap();
                             },

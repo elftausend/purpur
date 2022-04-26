@@ -7,6 +7,6 @@ edition = "2021"
 
 [dependencies]
 walkdir = "2"
-image = { version="0.24", default-features = false}
+image = { version="0.24", default-features = false, features=["jpeg", "png"]}
 rand = "*"
 csv = "*"

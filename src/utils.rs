@@ -21,6 +21,17 @@ pub fn get_paths<P: AsRef<Path>>(path: P) -> Result<(Vec<PathBuf>, Vec<DirEntry>
     Ok((entries, paths))
 }
 
+pub fn create_path_with_hash<P: AsRef<Path>, P1: AsRef<Path>>(image_path: P, output_to: P1, hash: u64) -> Result<PathBuf, std::io::Error> {
+    let image_path = image_path.as_ref();
+
+    let file_name = format!("{}_{}", hash, image_path.file_name().unwrap().to_str().unwrap());
+    let folder_from_file_path = image_path.parent().unwrap();
+    let folder_name = folder_from_file_path.file_name().unwrap().to_str().unwrap();
+    let path = format!("{}/{}", folder_name, file_name);
+    let output_to = Path::new(output_to.as_ref());
+    let path = output_to.join(path);
+    Ok(path)
+}
 
 pub fn create_new_path_from_old<P: AsRef<Path>, P1: AsRef<Path>>(image_path: P, output_to: P1, rng: &mut ThreadRng) -> Result<PathBuf, std::io::Error> {
     let addition: String = std::iter::repeat(())

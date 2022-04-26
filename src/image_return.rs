@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 use walkdir::DirEntry;
 
+#[derive(Debug)]
 pub struct ImageReturn {
     pub found_in: Vec<PathBuf>,
     pub exact_paths: Vec<DirEntry>,
@@ -16,7 +17,6 @@ impl Default for ImageReturn {
 }
 
 impl ImageReturn {
-
     pub fn found_in(&self) -> &Vec<PathBuf> {
         &self.found_in
     }
