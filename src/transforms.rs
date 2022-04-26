@@ -32,7 +32,7 @@ impl <'a>Transforms<'a> {
         }
     }
     pub fn shuffle(mut self) -> Self {
-        self.shuffle = true;
+        self.shuffle = !self.shuffle;
         self
     }
 

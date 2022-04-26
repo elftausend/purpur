@@ -51,4 +51,12 @@ impl ImageReturn {
         }
         classes_for_imgs
     }
+
+    pub fn sample_count(&self) -> usize {
+        self.exact_paths.len()
+    }
+
+    pub fn features(&self) -> usize {
+        self.data.len() / self.sample_count()
+    }
 }
