@@ -1,10 +1,9 @@
 use std::path::PathBuf;
-use walkdir::DirEntry;
 
 #[derive(Debug)]
 pub struct ImageReturn {
     pub found_in: Vec<PathBuf>,
-    pub exact_paths: Vec<DirEntry>,
+    pub exact_paths: Vec<PathBuf>,
     pub data: Vec<u8>,
     pub channels: Vec<u8>,
     pub dims: Vec<(usize, usize)>,
@@ -37,7 +36,7 @@ impl ImageReturn {
         let mut classes_for_imgs = Vec::new();
         
         for entry in self.exact_paths.iter() {
-            let mut comps = entry.path().components();
+            let mut comps = entry.components();
             
             let class_img = comps.nth(comps.clone().count()-2).unwrap().as_os_str().to_str().unwrap();
             let mut index = 0;

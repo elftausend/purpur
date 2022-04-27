@@ -1,10 +1,10 @@
 use std::path::{Path, PathBuf};
 
 use rand::{distributions::Alphanumeric, prelude::{ThreadRng, SliceRandom}, Rng};
-use walkdir::{WalkDir, DirEntry};
+use walkdir::WalkDir;
 
 
-pub fn get_paths<P: AsRef<Path>>(path: P) -> Result<(Vec<PathBuf>, Vec<DirEntry>), std::io::Error> {
+pub fn get_paths<P: AsRef<Path>>(path: P) -> Result<(Vec<PathBuf>, Vec<PathBuf>), std::io::Error> {
     // paths / directories that are named after a class
     let mut entries = std::fs::read_dir(&path)?
         .flat_map(|res| res.map(|e| e.path()))
@@ -13,9 +13,12 @@ pub fn get_paths<P: AsRef<Path>>(path: P) -> Result<(Vec<PathBuf>, Vec<DirEntry>
 
     entries.sort();
 
-    let paths: Vec<DirEntry> = WalkDir::new(path)
+    let paths: Vec<PathBuf> = WalkDir::new(path)
         .into_iter()
-        .flatten()
+        .flat_map(|entry| entry.map(|e| e.path().to_path_buf()))
+        .filter(|path| 
+            path.is_file() && 
+            !path.file_name().unwrap().to_str().unwrap().starts_with("."))
         .collect();
         
     Ok((entries, paths))

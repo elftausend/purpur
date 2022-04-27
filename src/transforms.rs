@@ -38,6 +38,7 @@ impl <'a>Transforms<'a> {
 
     pub fn apply<P: AsRef<Path>>(&mut self, path: P) -> Result<(), std::io::Error> {
         let (found_in, mut exact_paths) = utils::get_paths(path)?;
+        println!("exact_paths: {}", exact_paths.len());
 
         let mut rng = rand::thread_rng();
         
@@ -53,7 +54,7 @@ impl <'a>Transforms<'a> {
         let mut img_encode = false;
 
         for (idx, image_path) in exact_paths.iter().enumerate() {
-            match image::open(image_path.path()) {
+            match image::open(image_path) {
                 Ok(mut img) => {
                     match img.color() {
                         ColorType::L8 => channels.push(1),
@@ -68,31 +69,30 @@ impl <'a>Transforms<'a> {
                             Apply::FlipH => img = img.flipv(),
                             Apply::Contrast(c) => img = img.adjust_contrast(*c),
                             Apply::Resize(w, h) => img = img.resize_exact(*w, *h, FilterType::CatmullRom),
-                            Apply::GetVec(vec) => {
-                                let mut data = img.as_bytes().to_vec();
-                                vec.append(&mut data);
+                            Apply::GetVec(vec) => {      
+                                vec.extend_from_slice(img.as_bytes());
                             },
                             Apply::SaveTo(p) => {
                                 let mut hasher = DefaultHasher::default();                                
                                 img.as_bytes().hash(&mut hasher);
                                 let hash = hasher.finish();
                                 
-                                let path = create_path_with_hash(image_path.path(), p, hash)?;
+                                let path = create_path_with_hash(image_path, p, hash)?;
                                 //let path = create_new_path_from_old(image_path.path(), p, &mut rng)?;
                                 std::fs::create_dir_all(path.parent().unwrap())?;
                                 img.save(&path).unwrap();
                             },
                             Apply::GetImgRet(img_ret) => {
                                 
-                                let mut data = if img_encode {
-                                    img.as_bytes().to_vec()
+                                if img_encode {
+                                    img_ret.data.extend_from_slice(img.as_bytes());
                                 } else {
                                     let mut from_encoder = Vec::new();
-                                    let mut file = File::open(image_path.path()).unwrap();
+                                    let mut file = File::open(image_path).unwrap();
                                     file.read_to_end(&mut from_encoder).unwrap();
-                                    from_encoder
+                                    img_ret.data.append(&mut from_encoder);
                                 };
-                                img_ret.data.append(&mut data);
+                                
                                 if idx == image_count-1 {
                                     **img_ret = ImageReturn {
                                         found_in: found_in.clone(),
