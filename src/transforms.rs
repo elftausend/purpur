@@ -38,7 +38,6 @@ impl <'a>Transforms<'a> {
 
     pub fn apply<P: AsRef<Path>>(&mut self, path: P) -> Result<(), std::io::Error> {
         let (found_in, mut exact_paths) = utils::get_paths(path)?;
-        println!("exact_paths: {}", exact_paths.len());
 
         let mut rng = rand::thread_rng();
         
@@ -85,12 +84,12 @@ impl <'a>Transforms<'a> {
                             Apply::GetImgRet(img_ret) => {
                                 
                                 if img_encode {
-                                    img_ret.data.extend_from_slice(img.as_bytes());
-                                } else {
                                     let mut from_encoder = Vec::new();
                                     let mut file = File::open(image_path).unwrap();
                                     file.read_to_end(&mut from_encoder).unwrap();
                                     img_ret.data.append(&mut from_encoder);
+                                } else {
+                                    img_ret.data.extend_from_slice(img.as_bytes());
                                 };
                                 
                                 if idx == image_count-1 {
