@@ -21,7 +21,7 @@ impl ImageReturn {
     }
 
     pub fn get_classes(&self) -> Vec<(&str, usize)> {
-        let mut classes = Vec::new();
+        let mut classes = vec![(Default::default(), 0); self.found_in().len()];
         
         for (idx, path) in self.found_in().iter().enumerate() {
             let last_folder = path.components().last().unwrap().as_os_str().to_str().unwrap();
