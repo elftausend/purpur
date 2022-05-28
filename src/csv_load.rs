@@ -41,9 +41,7 @@ impl CSVLoader {
         let mut y: Vec<T> = Vec::new();
         let mut max = T::default();
         let mut m: usize = 0;
-
-        
-        
+     
         for result in rdr.records() {
             let mut first = true;
             let record = result.unwrap();

@@ -18,7 +18,7 @@ pub fn get_paths<P: AsRef<Path>>(path: P) -> Result<(Vec<PathBuf>, Vec<PathBuf>)
         .flat_map(|entry| entry.map(|e| e.path().to_path_buf()))
         .filter(|path| 
             path.is_file() && 
-            !path.file_name().unwrap().to_str().unwrap().starts_with("."))
+            !path.file_name().unwrap().to_str().unwrap().starts_with('.'))
         .collect();
         
     Ok((entries, paths))
@@ -56,26 +56,19 @@ pub fn create_new_path_from_old<P: AsRef<Path>, P1: AsRef<Path>>(image_path: P, 
 
 
 pub fn shuffle<T: Copy, G: Copy>(rows: usize, data: &[T], y_values: &[G]) -> (Vec<T>, Vec<G>) {
-    let mut x = vec![0usize; rows];
-    for idx in 1..rows {
-        x[idx] = idx;
-    }
-
-
+    let mut x: Vec<usize> = (0..rows).into_iter().collect();
+    
     let mut rng = rand::thread_rng();
     x.shuffle(&mut rng);
 
     let mut shuffeled = Vec::<T>::new();
-
     let mut y_shuffeled = Vec::<G>::new();
 
     let cols = data.len() / rows;
     
     for idx in x.iter() {
-
-        unsafe {
-            y_shuffeled.push(*y_values.get_unchecked(*idx));
-        }
+        y_shuffeled.push(y_values[*idx]);
+        
         let i = idx*cols;
         let row = &data[i..i+cols];
         for value in row {
