@@ -5,7 +5,6 @@ use walkdir::WalkDir;
 
 
 pub fn get_paths<P: AsRef<Path>>(path: P) -> Result<(Vec<PathBuf>, Vec<PathBuf>), std::io::Error> {
-    // paths / directories that are named after a class
     let mut entries = std::fs::read_dir(&path)?
         .flat_map(|res| res.map(|e| e.path()))
         .filter(|path| path.is_dir())
