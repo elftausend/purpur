@@ -6,6 +6,7 @@ description = "A data loading and image augmentation library."
 repository = "https://github.com/elftausend/purpur"
 keywords = ["deep-learning", "data-augmentation", "csv", "image", "vec"]
 readme = "README.md"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
