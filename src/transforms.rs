@@ -10,6 +10,7 @@ pub enum Apply<'a> {
     ///Flip vertically
     FlipV,
     FlipH,
+    Grayscale,
     Contrast(f32),
     Resize(u32, u32),
     CenterCrop(u32, u32),
@@ -110,7 +111,8 @@ impl <'a>Transforms<'a> {
                                 let subtract_h = height - *nh;
                                 
                                 img = img.crop_imm(subtract_w/2, subtract_h/2, width-subtract_w, height-subtract_h);
-                            },                            
+                            },
+                            Apply::Grayscale => img = img.grayscale(),
                         }
                     }
                     let img_dims = img.dimensions();
